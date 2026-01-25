@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import get_async_session
+from app.core.user import current_superuser
 from app.crud.charity_project import charity_project_crud
 from app.schemas.charity_project import (
     CharityProjectCreate,
@@ -39,7 +40,8 @@ async def get_all_charity_projects(session: SessionDep):
 @router.post(
     '/',
     response_model=CharityProjectDB,
-    response_model_exclude_none=True
+    response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)]
 )
 async def create_charity_project(
     obj_in: CharityProjectCreate,
@@ -65,7 +67,8 @@ async def create_charity_project(
 @router.patch(
     '/{project_id}',
     response_model=CharityProjectDB,
-    response_model_exclude_none=True
+    response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)]
 )
 async def update_charity_project(
     project_id: int,
@@ -102,7 +105,8 @@ async def update_charity_project(
 @router.delete(
     '/{project_id}',
     response_model=CharityProjectDB,
-    response_model_exclude_none=True
+    response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)]
 )
 async def delete_charity_project(
     project_id: int,

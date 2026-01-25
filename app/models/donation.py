@@ -11,6 +11,6 @@ class Donation(BaseModel):
     )
     user_id: Mapped[int] = mapped_column(
         Integer,
-        ForeignKey('user.id'),
+        ForeignKey('user.id', name='fk_donation_user_id_user'),
         nullable=False
     )

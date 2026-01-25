@@ -42,14 +42,16 @@ async def get_all_donations(session: SessionDep):
 )
 async def create_donation(
     obj_in: DonationCreate,
-    session: SessionDep
+    session: SessionDep,
+    user: UserDep
 ):
     """Создать пожертвование."""
     donation_db = await donation_crud.create(
         obj_in,
         session,
         to_be_committed=False,
-        invested_amount=0
+        invested_amount=0,
+        user_id=user.id
     )
     await invest_left_money(session, donation_to_add_to_session=donation_db)
 
@@ -61,17 +63,17 @@ async def create_donation(
 
 
 @router.get(
-    '/donation/my',
-    response_model=DonationDB,
+    '/my',
+    response_model=list[DonationDB],
     response_model_exclude_none=True,
     dependencies=[Depends(current_user)]
 )
 async def get_user_donation(
     session: SessionDep,
-    current_user: UserDep
+    user: UserDep
 ):
     donations = await donation_crud.get_donation_for_user(
         session,
-        current_user.id
+        user.id
     )
     return donations

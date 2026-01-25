@@ -30,3 +30,4 @@ class DonationFullInfoDB(DonationDB):
     invested_amount: int
     fully_invested: bool
     close_date: Optional[datetime]
+    user_id: int

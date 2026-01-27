@@ -8,26 +8,16 @@ from app.models.donation import Donation
 from app.models.charity_project import CharityProject
 
 
-async def get_not_full_donations(
-    session: AsyncSession
-) -> list[Donation]:
-    donations_with_money = await session.execute(
-        select(Donation).where(
-            ~Donation.fully_invested
+async def get_not_full_objects(
+    session: AsyncSession,
+    model
+):
+    objects_with_money = await session.execute(
+        select(model).where(
+            ~model.fully_invested
         )
     )
-    return donations_with_money.scalars().all()
-
-
-async def get_not_full_projects(
-    session: AsyncSession
-) -> list[CharityProject]:
-    projects_not_full = await session.execute(
-        select(CharityProject).where(
-            ~CharityProject.fully_invested
-        )
-    )
-    return projects_not_full.scalars().all()
+    return objects_with_money.scalars().all()
 
 
 async def invest_left_money(
@@ -40,11 +30,11 @@ async def invest_left_money(
 
     Проставляет значения в проектах и пожертвованиях.
     """
-    donations_with_money = await get_not_full_donations(session)
+    donations_with_money = await get_not_full_objects(session, Donation)
     if donation_to_add_to_session is not None:
         donations_with_money.append(donation_to_add_to_session)
 
-    projects_not_full = await get_not_full_projects(session)
+    projects_not_full = await get_not_full_objects(session, CharityProject)
     if project_to_add_to_session is not None:
         projects_not_full.append(project_to_add_to_session)
 

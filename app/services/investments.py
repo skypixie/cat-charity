@@ -4,13 +4,14 @@ from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.models.base import BaseModel
 from app.models.donation import Donation
 from app.models.charity_project import CharityProject
 
 
 async def get_not_full_objects(
     session: AsyncSession,
-    model
+    model: BaseModel
 ):
     objects_with_money = await session.execute(
         select(model).where(

@@ -48,8 +48,8 @@
 
 1. **Клонируйте репозиторий**:
 ```bash
-git clone https://github.com/skypixie/cat-charity-1.git
-cd cat-charity-1
+git clone https://github.com/skypixie/cat-charity-2.git
+cd cat-charity-2
 ```
 2. **Создайте и активируйте виртуальное окружение**
 ```bash
